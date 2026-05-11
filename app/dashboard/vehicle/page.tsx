@@ -342,11 +342,10 @@ export default function VehiclePage() {
                 className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium transition-colors relative"
                 style={{
                   color: activeTab === tab.id ? '#0A2342' : '#94A3B8',
-                  borderBottom: activeTab === tab.id ? '2px solid #F59E0B' : '2px solid transparent',
                   marginBottom: '-1px',
                   background: 'none',
-                  border: 'none',
                   cursor: 'pointer',
+                  borderWidth: 0,
                   borderBottomWidth: '2px',
                   borderBottomStyle: 'solid',
                   borderBottomColor: activeTab === tab.id ? '#F59E0B' : 'transparent',

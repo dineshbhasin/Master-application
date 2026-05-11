@@ -3,7 +3,7 @@
 import { usePathname } from 'next/navigation';
 import { useSession, signOut } from 'next-auth/react';
 import { useState, useRef, useEffect } from 'react';
-import { Bell, ChevronDown, User, Settings, LogOut } from 'lucide-react';
+import { Bell, ChevronDown, User, Settings, LogOut, Menu } from 'lucide-react';
 import Link from 'next/link';
 
 const PATH_TITLES: Record<string, string> = {
@@ -32,7 +32,7 @@ function getPageTitle(pathname: string): string {
   return last.charAt(0).toUpperCase() + last.slice(1).replace(/-/g, ' ');
 }
 
-export default function DashboardHeader() {
+export default function DashboardHeader({ onMenuClick }: { onMenuClick: () => void }) {
   const pathname = usePathname();
   const { data: session } = useSession();
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -62,11 +62,24 @@ export default function DashboardHeader() {
         borderBottom: '1px solid #E2E8F0',
       }}
     >
-      <div>
-        <h1 className="text-navy font-semibold text-lg leading-tight">{title}</h1>
-        <p className="text-xs" style={{ color: '#94A3B8' }}>
-          Unified Logistics Interface Platform
-        </p>
+      <div className="flex items-center gap-3">
+        {/* Hamburger — mobile only */}
+        <button
+          onClick={onMenuClick}
+          className="md:hidden flex items-center justify-center rounded-lg transition-colors"
+          style={{ width: '38px', height: '38px', color: '#64748B', flexShrink: 0 }}
+          onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#F1F5F9'; }}
+          onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
+          aria-label="Open menu"
+        >
+          <Menu size={20} />
+        </button>
+        <div>
+          <h1 className="text-navy font-semibold text-lg leading-tight">{title}</h1>
+          <p className="text-xs" style={{ color: '#94A3B8' }}>
+            Unified Logistics Interface Platform
+          </p>
+        </div>
       </div>
 
       <div className="flex items-center gap-3">

@@ -9,12 +9,15 @@ import {
   CreditCard,
   Map,
   FileCheck,
+  Globe2,
+  ShieldCheck,
   Leaf,
   Landmark,
   BarChart3,
   Settings,
   Activity,
   LogOut,
+  X,
 } from 'lucide-react';
 
 interface NavItem {
@@ -42,11 +45,13 @@ const navGroups: NavGroup[] = [
       { label: 'FASTag & Tolls', href: '/dashboard/fastag', icon: <CreditCard size={18} /> },
       { label: 'Multi-Modal Tracking', href: '/dashboard/tracking', icon: <Map size={18} /> },
       { label: 'Compliance Suite', href: '/dashboard/compliance', icon: <FileCheck size={18} /> },
+      { label: 'EXIM & Trade', href: '/dashboard/exim', icon: <Globe2 size={18} /> },
     ],
   },
   {
     title: 'Account',
     items: [
+      { label: 'My Identity', href: '/dashboard/identity', icon: <ShieldCheck size={18} /> },
       { label: 'Settings', href: '/dashboard/settings', icon: <Settings size={18} /> },
       { label: 'Activity Log', href: '/dashboard/activity', icon: <Activity size={18} /> },
     ],
@@ -68,7 +73,12 @@ function getInitials(name: string): string {
     .slice(0, 2);
 }
 
-export default function Sidebar() {
+interface SidebarProps {
+  open: boolean;
+  onClose: () => void;
+}
+
+export default function Sidebar({ open, onClose }: SidebarProps) {
   const pathname = usePathname();
   const { data: session } = useSession();
 
@@ -84,15 +94,30 @@ export default function Sidebar() {
   return (
     <aside
       style={{ width: '260px', backgroundColor: '#0A2342' }}
-      className="fixed left-0 top-0 h-full flex flex-col z-40 overflow-hidden"
+      className={`fixed left-0 top-0 h-full flex flex-col z-40 overflow-hidden transition-transform duration-300 ease-in-out ${
+        open ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
+      }`}
     >
       <div className="flex-1 overflow-y-auto scrollbar-thin">
         <div className="px-6 pt-6 pb-4">
-          <div className="flex flex-col">
-            <span className="text-white font-bold text-2xl tracking-tight">ULIP</span>
-            <span style={{ color: '#F59E0B' }} className="text-xs font-medium mt-0.5">
-              Logistics Gateway
-            </span>
+          <div className="flex items-center justify-between">
+            <div className="flex flex-col">
+              <span className="text-white font-bold text-2xl tracking-tight">ULIP</span>
+              <span style={{ color: '#F59E0B' }} className="text-xs font-medium mt-0.5">
+                Logistics Gateway
+              </span>
+            </div>
+            {/* Close button — mobile only */}
+            <button
+              onClick={onClose}
+              className="md:hidden flex items-center justify-center rounded-lg transition-colors"
+              style={{ width: '32px', height: '32px', color: 'rgba(255,255,255,0.5)' }}
+              onMouseEnter={(e) => { e.currentTarget.style.color = 'white'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.5)'; }}
+              aria-label="Close menu"
+            >
+              <X size={18} />
+            </button>
           </div>
           <div style={{ backgroundColor: '#F59E0B', height: '1px', opacity: 0.4 }} className="mt-4" />
         </div>
@@ -114,6 +139,7 @@ export default function Sidebar() {
                       <Link
                         href={item.href}
                         className={active ? 'nav-link-active' : 'nav-link'}
+                        onClick={onClose}
                       >
                         {item.icon}
                         <span>{item.label}</span>

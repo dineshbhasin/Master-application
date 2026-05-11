@@ -343,7 +343,8 @@ function EWayBillTab() {
               cursor: 'pointer',
               paddingBottom: '10px',
               paddingTop: '8px',
-              borderBottom: '2px solid',
+              borderBottomWidth: '2px',
+              borderBottomStyle: 'solid',
               borderBottomColor: subTab === s ? '#F59E0B' : 'transparent',
               marginBottom: '-1px',
             }}

@@ -225,7 +225,7 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-6 animate-fade-in">
-      <div className="flex items-start justify-between">
+      <div className="flex flex-col sm:flex-row items-start sm:justify-between gap-3">
         <div>
           <h2 className="text-2xl font-bold" style={{ color: '#0A2342' }}>
             {greeting}, {userName} 👋
@@ -235,7 +235,7 @@ export default function DashboardPage() {
           </p>
         </div>
         <div
-          className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium"
+          className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium shrink-0"
           style={{ backgroundColor: '#D1FAE5', color: '#059669' }}
         >
           <Clock size={14} />
@@ -248,13 +248,13 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {statCards.map((card) => (
           <StatCard key={card.label} {...card} />
         ))}
       </div>
 
-      <div className="grid gap-6" style={{ gridTemplateColumns: '3fr 2fr' }}>
+      <div className="grid gap-6 grid-cols-1 md:grid-cols-[3fr_2fr]">
         <div className="ulip-card">
           <div className="flex items-center justify-between mb-4">
             <h3 className="font-semibold" style={{ color: '#0A2342' }}>
