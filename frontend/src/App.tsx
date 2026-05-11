@@ -1,0 +1,95 @@
+import React from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from './auth/AuthContext';
+import ProtectedRoute from './auth/ProtectedRoute';
+import DashboardLayout from './components/layout/DashboardLayout';
+
+// Shared pages
+import Login from './shared/pages/Login';
+import Register from './shared/pages/Register';
+import Dashboard from './shared/pages/Dashboard';
+
+// Citizen module
+import { VehicleIntel, FASTag } from './modules/citizen';
+
+// SME module
+import { Compliance, EXIM, Identity } from './modules/sme';
+
+// Enterprise module
+import { MultiModalTracking, RoutePlanner } from './modules/enterprise';
+
+// Official module
+import { ActivityLog } from './modules/official';
+
+export default function App() {
+  return (
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          {/* Public */}
+          <Route path="/login"    element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/"         element={<Navigate to="/dashboard" replace />} />
+
+          {/* Protected — all roles */}
+          <Route path="/dashboard" element={
+            <ProtectedRoute>
+              <DashboardLayout><Dashboard /></DashboardLayout>
+            </ProtectedRoute>
+          } />
+
+          {/* Citizen module — all roles */}
+          <Route path="/dashboard/vehicle" element={
+            <ProtectedRoute>
+              <DashboardLayout><VehicleIntel /></DashboardLayout>
+            </ProtectedRoute>
+          } />
+          <Route path="/dashboard/fastag" element={
+            <ProtectedRoute>
+              <DashboardLayout><FASTag /></DashboardLayout>
+            </ProtectedRoute>
+          } />
+
+          {/* SME module — sme, enterprise, official */}
+          <Route path="/dashboard/compliance" element={
+            <ProtectedRoute roles={['sme', 'enterprise', 'official']}>
+              <DashboardLayout><Compliance /></DashboardLayout>
+            </ProtectedRoute>
+          } />
+          <Route path="/dashboard/exim" element={
+            <ProtectedRoute roles={['sme', 'enterprise', 'official']}>
+              <DashboardLayout><EXIM /></DashboardLayout>
+            </ProtectedRoute>
+          } />
+          <Route path="/dashboard/identity" element={
+            <ProtectedRoute roles={['sme', 'enterprise', 'official']}>
+              <DashboardLayout><Identity /></DashboardLayout>
+            </ProtectedRoute>
+          } />
+
+          {/* Enterprise module — enterprise, official */}
+          <Route path="/dashboard/tracking" element={
+            <ProtectedRoute roles={['enterprise', 'official']}>
+              <DashboardLayout><MultiModalTracking /></DashboardLayout>
+            </ProtectedRoute>
+          } />
+          <Route path="/dashboard/routes" element={
+            <ProtectedRoute roles={['enterprise', 'official']}>
+              <DashboardLayout><RoutePlanner /></DashboardLayout>
+            </ProtectedRoute>
+          } />
+
+          {/* Official module — official only */}
+          <Route path="/dashboard/activity" element={
+            <ProtectedRoute roles={['official']}>
+              <DashboardLayout><ActivityLog /></DashboardLayout>
+            </ProtectedRoute>
+          } />
+
+          {/* Fallback */}
+          <Route path="*" element={<Navigate to="/dashboard" replace />} />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
+  );
+}
