@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useBreakpoint } from '../../../hooks/useBreakpoint';
 import {
   Globe2, FileText, CheckCircle2, AlertTriangle, Info,
   ChevronDown, ChevronUp, Package, Banknote, ShieldCheck, Loader2,
@@ -262,6 +263,7 @@ const PRESETS = [
 ];
 
 export default function EXIM() {
+  const { isMobile } = useBreakpoint();
   const [hsn, setHsn]             = useState('');
   const [origin, setOrigin]       = useState('India');
   const [destination, setDest]    = useState('');
@@ -323,7 +325,7 @@ export default function EXIM() {
           </div>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)', gap: 16 }}>
           <div>
             <label style={{ display: 'block', fontSize: 12, fontWeight: 600, marginBottom: 6, color: '#374151' }}>HSN Code <span style={{ color: '#EF4444' }}>*</span></label>
             <input type="text" value={hsn} onChange={(e) => setHsn(e.target.value.replace(/\D/g, '').slice(0, 8))} placeholder="e.g. 61091000" maxLength={8} style={inputStyle}
@@ -390,7 +392,7 @@ export default function EXIM() {
               <Banknote size={15} style={{ color: '#059669' }} />
               <p style={{ fontSize: 14, fontWeight: 600, color: '#0A2342', margin: 0 }}>Applicable Tariff (Import to {result.destination})</p>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)', gap: 12 }}>
               {[
                 { label: 'Basic Customs Duty', value: result.tariff.bcd },
                 { label: 'IGST', value: result.tariff.igst },

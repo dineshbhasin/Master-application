@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { platformApi, PlatformUser } from '../../../api/platform';
+import { useBreakpoint } from '../../../hooks/useBreakpoint';
 
 const ROLES = ['citizen', 'sme', 'enterprise', 'official'];
 
@@ -12,6 +13,7 @@ const roleColor: Record<string, string> = {
 };
 
 export default function AdminUsers() {
+  const { isMobile } = useBreakpoint();
   const [users, setUsers]       = useState<PlatformUser[]>([]);
   const [total, setTotal]       = useState(0);
   const [page, setPage]         = useState(1);
@@ -73,7 +75,7 @@ export default function AdminUsers() {
   }
 
   return (
-    <div style={{ padding: '32px 40px', maxWidth: 1100, margin: '0 auto' }}>
+    <div style={{ padding: isMobile ? '0' : '32px 40px', maxWidth: 1100, margin: '0 auto' }}>
       <div style={{ marginBottom: 28 }}>
         <h1 style={{ fontSize: 26, fontWeight: 800, color: '#0A2342', margin: 0 }}>User Management</h1>
         <p style={{ color: '#6B7280', fontSize: 14, marginTop: 4 }}>Manage roles and access for all platform users</p>
@@ -107,7 +109,8 @@ export default function AdminUsers() {
 
       {/* Table */}
       <div style={{ background: 'white', borderRadius: 12, border: '1px solid #E5E7EB', overflow: 'hidden' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+        <div style={{ overflowX: 'auto' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 580 }}>
           <thead>
             <tr style={{ background: '#F9FAFB', borderBottom: '1px solid #E5E7EB' }}>
               {['Name', 'Email', 'Role', 'Verified', 'Joined', 'Actions'].map((h) => (
@@ -160,6 +163,7 @@ export default function AdminUsers() {
             ))}
           </tbody>
         </table>
+        </div>
       </div>
 
       {/* Pagination */}

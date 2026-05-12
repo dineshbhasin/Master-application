@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { platformApi, ActivityLog, ActivityStats } from '../../../api/platform';
+import { useBreakpoint } from '../../../hooks/useBreakpoint';
 
 type ViewMode = 'all' | 'user' | 'api';
 
@@ -10,6 +11,7 @@ const statusColor: Record<string, string> = {
 };
 
 export default function AdminActivity() {
+  const { isMobile } = useBreakpoint();
   const [logs, setLogs]       = useState<ActivityLog[]>([]);
   const [stats, setStats]     = useState<ActivityStats | null>(null);
   const [modules, setModules] = useState<string[]>([]);
@@ -65,7 +67,7 @@ export default function AdminActivity() {
   }
 
   return (
-    <div style={{ padding: '32px 40px', maxWidth: 1200, margin: '0 auto' }}>
+    <div style={{ padding: isMobile ? '0' : '32px 40px', maxWidth: 1200, margin: '0 auto' }}>
       <div style={{ marginBottom: 28 }}>
         <h1 style={{ fontSize: 26, fontWeight: 800, color: '#0A2342', margin: 0 }}>Activity Log</h1>
         <p style={{ color: '#6B7280', fontSize: 14, marginTop: 4 }}>Full audit trail of user and API activity across the platform</p>
@@ -73,7 +75,7 @@ export default function AdminActivity() {
 
       {/* Stats */}
       {stats && (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, marginBottom: 28 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)', gap: 16, marginBottom: 28 }}>
           {[
             { label: 'Total Events', value: stats.total.toLocaleString(), color: '#3B82F6' },
             { label: 'Last 24 Hours', value: stats.last24h.toLocaleString(), color: '#10B981' },

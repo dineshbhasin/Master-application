@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useBreakpoint } from '../../../hooks/useBreakpoint';
 
 const ROUTE_1_COORDS: [number, number][] = [
   [28.6139, 77.2090], [28.5467, 77.3916], [28.4744, 77.5117],
@@ -49,6 +50,7 @@ declare global {
 }
 
 function RouteMap({ from, to }: { from: string; to: string }) {
+  const { isMobile } = useBreakpoint();
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<import('leaflet').Map | null>(null);
 
@@ -131,8 +133,8 @@ function RouteMap({ from, to }: { from: string; to: string }) {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-      <div ref={mapRef} style={{ height: 480, width: '100%', borderRadius: 12, border: '1px solid #E2E8F0', overflow: 'hidden' }} />
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+      <div ref={mapRef} style={{ height: isMobile ? 320 : 480, width: '100%', borderRadius: 12, border: '1px solid #E2E8F0', overflow: 'hidden' }} />
+      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 12 }}>
         <div style={{ background: '#F0FDF4', border: '1px solid #BBF7D0', borderRadius: 12, padding: 16 }}>
           <p style={{ fontSize: 12, fontWeight: 600, color: '#059669', margin: 0 }}>Route 1 — Yamuna Expressway (Recommended)</p>
           <p style={{ fontSize: 14, fontWeight: 700, color: '#0A2342', margin: '4px 0 0' }}>165 km · ~2h 30m</p>
