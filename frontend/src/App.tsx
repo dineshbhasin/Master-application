@@ -21,6 +21,20 @@ import { MultiModalTracking, RoutePlanner } from './modules/enterprise';
 // Official module
 import { ActivityLog } from './modules/official';
 
+// Super Admin module
+import {
+  Overview, Analytics, NodeHealth, Organizations, UserManagement,
+  AuditTrail, DPDPRequests, ApiKeys, TwoFactorSetup, SuperAdminLayout,
+} from './modules/superadmin';
+
+function SuperAdminRoute({ children }: { children: React.ReactNode }) {
+  return (
+    <ProtectedRoute roles={['super_admin']}>
+      <SuperAdminLayout>{children}</SuperAdminLayout>
+    </ProtectedRoute>
+  );
+}
+
 export default function App() {
   return (
     <AuthProvider>
@@ -85,6 +99,22 @@ export default function App() {
               <DashboardLayout><ActivityLog /></DashboardLayout>
             </ProtectedRoute>
           } />
+
+          {/* Super Admin — 2FA setup gate, then full console */}
+          <Route path="/super-admin/2fa" element={
+            <ProtectedRoute roles={['super_admin']}>
+              <TwoFactorSetup />
+            </ProtectedRoute>
+          } />
+          <Route path="/super-admin/overview"      element={<SuperAdminRoute><Overview /></SuperAdminRoute>} />
+          <Route path="/super-admin/analytics"     element={<SuperAdminRoute><Analytics /></SuperAdminRoute>} />
+          <Route path="/super-admin/node-health"   element={<SuperAdminRoute><NodeHealth /></SuperAdminRoute>} />
+          <Route path="/super-admin/organizations" element={<SuperAdminRoute><Organizations /></SuperAdminRoute>} />
+          <Route path="/super-admin/users"         element={<SuperAdminRoute><UserManagement /></SuperAdminRoute>} />
+          <Route path="/super-admin/audit-trail"   element={<SuperAdminRoute><AuditTrail /></SuperAdminRoute>} />
+          <Route path="/super-admin/dpdp"          element={<SuperAdminRoute><DPDPRequests /></SuperAdminRoute>} />
+          <Route path="/super-admin/api-keys"      element={<SuperAdminRoute><ApiKeys /></SuperAdminRoute>} />
+          <Route path="/super-admin"               element={<Navigate to="/super-admin/overview" replace />} />
 
           {/* Fallback */}
           <Route path="*" element={<Navigate to="/dashboard" replace />} />

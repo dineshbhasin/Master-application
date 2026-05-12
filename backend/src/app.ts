@@ -8,6 +8,14 @@ import vehicleRouter from './routes/vehicle';
 import fastagRouter from './routes/fastag';
 import complianceRouter from './routes/compliance';
 import trackingRouter from './routes/tracking';
+import adminAnalyticsRouter from './routes/admin/analytics';
+import adminNodeHealthRouter from './routes/admin/nodeHealth';
+import adminOrgsRouter from './routes/admin/organizations';
+import adminUsersRouter from './routes/admin/users';
+import adminAuditRouter from './routes/admin/auditTrail';
+import adminDPDPRouter from './routes/admin/dpdp';
+import adminApiKeysRouter from './routes/admin/apiKeys';
+import adminTwoFactorRouter from './routes/admin/twoFactor';
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -23,6 +31,16 @@ app.use('/api/vehicle',    vehicleRouter);
 app.use('/api/fastag',     fastagRouter);
 app.use('/api/compliance', complianceRouter);
 app.use('/api/tracking',   trackingRouter);
+
+// Super-admin routes — all gated by requireSuperAdmin + TOTP
+app.use('/api/admin/2fa',         adminTwoFactorRouter);
+app.use('/api/admin/analytics',   adminAnalyticsRouter);
+app.use('/api/admin/node-health', adminNodeHealthRouter);
+app.use('/api/admin/organizations', adminOrgsRouter);
+app.use('/api/admin/users',       adminUsersRouter);
+app.use('/api/admin/audit-trail', adminAuditRouter);
+app.use('/api/admin/dpdp',        adminDPDPRouter);
+app.use('/api/admin/api-keys',    adminApiKeysRouter);
 
 // ── Health check ───────────────────────────────────────────────────────────────
 app.get('/health', (_req, res) => res.json({ status: 'ok', timestamp: new Date().toISOString() }));
