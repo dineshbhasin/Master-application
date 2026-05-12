@@ -2,7 +2,6 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { adminApi, ErasureRequest } from '../../../api/admin';
 
 const navy = '#0A2342';
-const saffron = '#F59E0B';
 
 function statusPill(status: string) {
   const s: Record<string, { bg: string; color: string }> = {

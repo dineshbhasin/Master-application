@@ -16,12 +16,22 @@ import adminAuditRouter from './routes/admin/auditTrail';
 import adminDPDPRouter from './routes/admin/dpdp';
 import adminApiKeysRouter from './routes/admin/apiKeys';
 import adminTwoFactorRouter from './routes/admin/twoFactor';
+import platformRouter from './routes/platform';
 
 const app = express();
 const PORT = process.env.PORT || 4000;
 
 // ── Middleware ─────────────────────────────────────────────────────────────────
-app.use(cors({ origin: process.env.CLIENT_URL || 'http://localhost:3000', credentials: true }));
+app.use(cors({
+  origin: (origin, cb) => {
+    if (!origin || /^http:\/\/localhost(:\d+)?$/.test(origin) || origin === (process.env.CLIENT_URL || '')) {
+      cb(null, true);
+    } else {
+      cb(new Error('CORS: origin not allowed'));
+    }
+  },
+  credentials: true,
+}));
 app.use(express.json());
 app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 300, standardHeaders: true, legacyHeaders: false }));
 
@@ -41,6 +51,9 @@ app.use('/api/admin/users',       adminUsersRouter);
 app.use('/api/admin/audit-trail', adminAuditRouter);
 app.use('/api/admin/dpdp',        adminDPDPRouter);
 app.use('/api/admin/api-keys',    adminApiKeysRouter);
+
+// Platform admin routes — gated by requireRole('official', 'super_admin'), no TOTP
+app.use('/api/platform',          platformRouter);
 
 // ── Health check ───────────────────────────────────────────────────────────────
 app.get('/health', (_req, res) => res.json({ status: 'ok', timestamp: new Date().toISOString() }));

@@ -31,7 +31,15 @@ export default function Sidebar({ open, onClose }: Props) {
     !item.roles || (user && item.roles.includes(user.role))
   );
 
+  const isAdmin = user && (user.role === 'official' || user.role === 'super_admin');
   const initials = user?.name?.split(' ').map((p) => p[0]).join('').toUpperCase().slice(0, 2) || 'U';
+
+  const navLinkStyle = ({ isActive }: { isActive: boolean }) => ({
+    display: 'flex', alignItems: 'center', gap: 10, padding: '9px 12px', borderRadius: 8,
+    marginBottom: 4, textDecoration: 'none', fontSize: 13, fontWeight: 600,
+    color: isActive ? 'white' : 'rgba(255,255,255,0.5)',
+    background: isActive ? 'rgba(255,255,255,0.1)' : 'transparent',
+  });
 
   return (
     <>
@@ -63,16 +71,12 @@ export default function Sidebar({ open, onClose }: Props) {
 
         {/* Nav */}
         <nav style={{ flex: 1, padding: '16px 12px' }}>
-          <NavLink to="/dashboard" end
-            style={({ isActive }) => ({ display: 'flex', alignItems: 'center', gap: 10, padding: '9px 12px', borderRadius: 8, marginBottom: 4, textDecoration: 'none', fontSize: 13, fontWeight: 600, color: isActive ? 'white' : 'rgba(255,255,255,0.5)', background: isActive ? 'rgba(255,255,255,0.1)' : 'transparent' })}
-            onClick={onClose}>
+          <NavLink to="/dashboard" end style={navLinkStyle} onClick={onClose}>
             Dashboard
           </NavLink>
 
           {visibleNav.map((item) => (
-            <NavLink key={item.to} to={item.to}
-              style={({ isActive }) => ({ display: 'flex', alignItems: 'center', gap: 10, padding: '9px 12px', borderRadius: 8, marginBottom: 4, textDecoration: 'none', fontSize: 13, fontWeight: 600, color: isActive ? 'white' : 'rgba(255,255,255,0.5)', background: isActive ? 'rgba(255,255,255,0.1)' : 'transparent' })}
-              onClick={onClose}>
+            <NavLink key={item.to} to={item.to} style={navLinkStyle} onClick={onClose}>
               {item.label}
               {item.roles && (
                 <span style={{ marginLeft: 'auto', fontSize: 9, background: 'rgba(245,158,11,0.2)', color: '#F59E0B', padding: '2px 5px', borderRadius: 3, fontWeight: 700, textTransform: 'uppercase' }}>
@@ -81,6 +85,21 @@ export default function Sidebar({ open, onClose }: Props) {
               )}
             </NavLink>
           ))}
+
+          {/* Admin section */}
+          {isAdmin && (
+            <>
+              <div style={{ margin: '16px 0 8px 12px', fontSize: 10, fontWeight: 700, color: 'rgba(255,255,255,0.25)', textTransform: 'uppercase', letterSpacing: '1px' }}>
+                Admin
+              </div>
+              <NavLink to="/admin/users" style={navLinkStyle} onClick={onClose}>
+                Users
+              </NavLink>
+              <NavLink to="/admin/activity" style={navLinkStyle} onClick={onClose}>
+                Activity Log
+              </NavLink>
+            </>
+          )}
         </nav>
 
         {/* User */}

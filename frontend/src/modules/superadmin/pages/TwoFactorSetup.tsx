@@ -1,13 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { adminApi } from '../../../api/admin';
-import { useAuth } from '../../../auth/AuthContext';
-
 const navy = '#0A2342';
 const saffron = '#F59E0B';
 
 export default function TwoFactorSetup() {
-  const { login } = useAuth();
   const navigate = useNavigate();
   const [step, setStep] = useState<'setup' | 'verify'>('setup');
   const [secret, setSecret] = useState('');

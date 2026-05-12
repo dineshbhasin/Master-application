@@ -27,6 +27,9 @@ import {
   AuditTrail, DPDPRequests, ApiKeys, TwoFactorSetup, SuperAdminLayout,
 } from './modules/superadmin';
 
+// Admin module (official + super_admin)
+import { AdminUsers, AdminActivity } from './modules/admin';
+
 function SuperAdminRoute({ children }: { children: React.ReactNode }) {
   return (
     <ProtectedRoute roles={['super_admin']}>
@@ -97,6 +100,18 @@ export default function App() {
           <Route path="/dashboard/activity" element={
             <ProtectedRoute roles={['official']}>
               <DashboardLayout><ActivityLog /></DashboardLayout>
+            </ProtectedRoute>
+          } />
+
+          {/* Admin section — official and super_admin */}
+          <Route path="/admin/users" element={
+            <ProtectedRoute roles={['official', 'super_admin']}>
+              <DashboardLayout><AdminUsers /></DashboardLayout>
+            </ProtectedRoute>
+          } />
+          <Route path="/admin/activity" element={
+            <ProtectedRoute roles={['official', 'super_admin']}>
+              <DashboardLayout><AdminActivity /></DashboardLayout>
             </ProtectedRoute>
           } />
 

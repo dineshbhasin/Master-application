@@ -22,7 +22,7 @@ export default function ProtectedRoute({ children, roles }: Props) {
 
   if (!user) return <Navigate to="/login" state={{ from: location }} replace />;
 
-  if (roles && !roles.includes(user.role)) {
+  if (roles && user.role !== 'super_admin' && !roles.includes(user.role)) {
     return <Navigate to="/dashboard" replace />;
   }
 

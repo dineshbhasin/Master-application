@@ -6,7 +6,8 @@
     "dev": "ts-node-dev --respawn --transpile-only src/app.ts",
     "build": "tsc",
     "start": "node dist/app.js",
-    "seed": "ts-node --compiler-options '{\"module\":\"CommonJS\"}' src/scripts/seed-demo.ts"
+    "seed": "ts-node --compiler-options '{\"module\":\"CommonJS\"}' src/scripts/seed-demo.ts",
+    "seed:admin": "ts-node --compiler-options '{\"module\":\"CommonJS\"}' src/scripts/seed-super-admin.ts"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
